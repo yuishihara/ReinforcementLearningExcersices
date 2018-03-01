@@ -5,6 +5,11 @@ class GridWorld(Environment):
   __DOWN = 2
   __LEFT = 3
   __RIGHT = 4
+  __UP_RIGHT = 5
+  __DOWN_RIGHT = 6
+  __UP_LEFT = 7
+  __DOWN_LEFT = 8
+  __NO_MOVE = 9
 
   __WIDTH = 10
   __HEIGHT = 7
@@ -37,7 +42,7 @@ class GridWorld(Environment):
 
 
   def available_actions(self):
-    return [GridWorld.__UP, GridWorld.__DOWN, GridWorld.__LEFT, GridWorld.__RIGHT]
+    return [GridWorld.__UP, GridWorld.__DOWN, GridWorld.__LEFT, GridWorld.__RIGHT, GridWorld.__UP_RIGHT, GridWorld.__DOWN_RIGHT, GridWorld.__UP_LEFT, GridWorld.__DOWN_LEFT, GridWorld.__NO_MOVE]
 
 
   def action_to_str(self, action):
@@ -49,6 +54,16 @@ class GridWorld(Environment):
       return 'RIGHT'
     elif action == GridWorld.__LEFT:
       return 'LEFT'
+    elif action == GridWorld.__UP_RIGHT:
+      return 'UP RIGHT'
+    elif action == GridWorld.__DOWN_RIGHT:
+      return 'DOWN RIGHT'
+    elif action == GridWorld.__UP_LEFT:
+      return 'UP LEFT'
+    elif action == GridWorld._DOWN_LEFT:
+      return 'DOWN LEFT'
+    elif action == GridWorld.__NO_MOVE:
+      return 'NO MOVE'
     else:
       return 'UNKNOWN'
 
@@ -66,6 +81,16 @@ class GridWorld(Environment):
       return (1, 0)
     elif action == GridWorld.__LEFT:
       return (-1, 0)
+    elif action == GridWorld.__UP_RIGHT:
+      return (1, 1)
+    elif action == GridWorld.__DOWN_RIGHT:
+      return (1, -1)
+    elif action == GridWorld.__UP_LEFT:
+      return (-1, 1)
+    elif action == GridWorld.__DOWN_LEFT:
+      return (-1, -1)
+    elif action == GridWorld.__NO_MOVE:
+      return (0, 0)
     else:
       assert False
 
