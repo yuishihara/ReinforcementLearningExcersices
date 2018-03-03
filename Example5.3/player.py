@@ -1,14 +1,15 @@
 import numpy as np
 import random
-from copy import deepcopy
+import copy
+from hand import Hand
 
 class Player:
   def __init__(self):
     self.__hand = None
     self.__policy_with_ace = np.zeros((10, 10, 2))
     self.__policy_without_ace = np.zeros((10, 10, 2))
-    self.__rewards_with_ace = [[[[] for i in range(2)] for j in range(10)] for k in range(10)]
-    self.__rewards_without_ace = [[[[] for i in range(2)] for j in range(10)] for k in range(10)]
+    self.__rewards_with_ace = np.zeros((10, 10, 2))
+    self.__rewards_without_ace = np.zeros((10, 10, 2))
     self.__sequence = None
 
 
@@ -33,7 +34,8 @@ class Player:
         action = np.argmax(self.__policy_with_ace[dealer_index][hand_index])
       else:
         action = np.argmax(self.__policy_without_ace[dealer_index][hand_index])
-    self.__sequence.append((deepcopy(self.__hand), dealer_card, action))
+    hand = Hand(copy.copy(self.__hand.cards()))
+    self.__sequence.append((hand, dealer_card, action))
     assert action == 0 or action == 1
     return action
 
@@ -48,12 +50,16 @@ class Player:
       dealer_index = dealer_number - 1
       hand_index = hand.total() - 12
       if hand.has_available_ace():
-        self.__rewards_with_ace[dealer_index][hand_index][action].append(reward)
-        avg = np.average(self.__rewards_with_ace[dealer_index][hand_index][action])
+        coef = self.__rewards_with_ace[dealer_index][hand_index][action]
+        prev = self.__policy_with_ace[dealer_index][hand_index][action]
+        avg = (prev * coef + reward) / (coef + 1.0)
+        self.__rewards_with_ace[dealer_index][hand_index][action] += 1
         self.__policy_with_ace[dealer_index][hand_index][action] = avg
       else:
-        self.__rewards_without_ace[dealer_index][hand_index][action].append(reward)
-        avg = np.average(self.__rewards_without_ace[dealer_index][hand_index][action])
+        coef = self.__rewards_without_ace[dealer_index][hand_index][action]
+        prev = self.__policy_without_ace[dealer_index][hand_index][action]
+        avg = (prev * coef + reward) / (coef + 1.0)
+        self.__rewards_without_ace[dealer_index][hand_index][action] += 1
         self.__policy_without_ace[dealer_index][hand_index][action] = avg
 
 

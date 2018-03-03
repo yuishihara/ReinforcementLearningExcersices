@@ -87,7 +87,7 @@ def plot_border(border, rows, columns, index, title):
 
 
 def main():
-  max_loops = 1000000
+  max_loops = 3000000
   trials = 0
   dealer = Dealer()
   player = Player()

@@ -1,7 +1,7 @@
 class Hand:
   def __init__(self, cards):
-    assert len(cards) == 2
     self.__cards = cards
+    self.__total = self.sum_cards(cards)
 
 
   def __str__(self):
@@ -14,6 +14,7 @@ class Hand:
 
   def add_card(self, card):
     self.__cards.append(card)
+    self.__total = self.sum_cards(self.__cards)
 
 
   def cards(self):
@@ -32,7 +33,7 @@ class Hand:
 
 
   def total(self):
-    return self.sum_cards(self.__cards)
+    return self.__total
 
 
   def is_busted(self):
